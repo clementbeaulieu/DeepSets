@@ -1,0 +1,1 @@
+python run.py --name digitsum --dataset digitsum_image --root-dir /Users/clementbeaulieu/Desktop/Polytechnique/UERecherche/DeepSets/data --arch digitsum_image --model-name digitsum_image100 --min-size 5 --max-size 5 --dataset-size 10 --batch-size 2 --epochs 1
