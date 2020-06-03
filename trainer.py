@@ -6,7 +6,7 @@ import torch
 from toolbox import utils, metrics
 
 
-def train(args, train_loader, model, criterion, optimizer, logger, epoch, eval_score=None, print_freq=10, tb_writer=None):
+def train(args, train_loader, model, criterion, optimizer, logger, epoch, eval_score=None, print_freq=1000, tb_writer=None):
 
     # Switch to train mode
     model.train()
@@ -115,4 +115,4 @@ def validate(args, val_loader, model, criterion, logger, epoch, eval_score=None,
     totals = np.array(totals)
     corrects = np.array(corrects)
 
-    print(corrects)
+    print(corrects/totals)
