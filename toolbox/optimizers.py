@@ -14,7 +14,7 @@ def get_optimizer(args, model):
     if args.optimizer == 'sgd':
         optimizer = torch.optim.SGD(get_optim_parameters(model), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
     elif args.optimizer == 'adam':
-        optimizer = torch.optim.Adam(get_optim_parameters(model), lr=args.lr, amsgrad=False)
+        optimizer = torch.optim.Adam(get_optim_parameters(model), lr=args.lr, weight_decay=args.weight_decay)#amsgrad=False)
     else:
         raise 'Optimizer {} not available'.format(args.optimizer)
 

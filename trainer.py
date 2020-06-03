@@ -32,6 +32,8 @@ def train(args, train_loader, model, criterion, optimizer, logger, epoch, eval_s
 
         output_batch, target_batch = utils.compute_batch(batch, args, model)
 
+        output_batch, target_batch = output_batch.to(args.device), target_batch.to(args.device)
+
         #print('output_batch: ', output_batch)
         #print('ouput_batch size: ', output_batch.size())
         #print('target_batch: ', target_batch)
