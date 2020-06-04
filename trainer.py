@@ -84,7 +84,7 @@ def train(args, train_loader, model, criterion, optimizer, logger, epoch, eval_s
     logger.log_meters('train', n=epoch)
     logger.log_meters('hyperparams', n=epoch)
 
-def validate(args, val_loader, model, criterion, logger, epoch, eval_score=None, print_freq=10,tb_writer=None):
+def validate(args, model) #, val_loader, model, criterion, logger, epoch, eval_score=None, print_freq=10,tb_writer=None):
 
     # switch model to evaluate
     model.eval()
