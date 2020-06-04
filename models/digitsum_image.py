@@ -11,9 +11,9 @@ class DigitSumImagePhi(nn.Module):
         #self.dropout_conv1 = nn.Dropout(p=0.2)
         self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
         self.dropout_conv2 = nn.Dropout()#p=0.2)
-        self.fc1 = nn.Linear(320, 100)
+        self.fc1 = nn.Linear(320, 50)
         #self.dropout_fc1 = nn.Dropout()
-        self.fc2 = nn.Linear(100,10)
+        self.fc2 = nn.Linear(50,10)
         self.dropout_fc2 = nn.Dropout()
 
     def forward(self, x):

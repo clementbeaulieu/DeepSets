@@ -98,7 +98,7 @@ def main():
                 
             print(f"Updating learning rate from {prev_lr} to {optimizer.param_groups[0]['lr']}")
 
-    trainer.validate(args, val_loader, model, criterion, logger, epoch, eval_score=None, print_freq=10,tb_writer=None)
+        trainer.validate(args, val_loader, model, criterion, logger, epoch, eval_score=None, print_freq=10,tb_writer=None)
     
     if args.tensorboard:
         tb_writer.close()
