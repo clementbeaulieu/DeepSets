@@ -43,20 +43,6 @@ def check_dir(dir_path):
 def count_params(model):
    return sum([p.data.nelement() for p in model.parameters()])
 
-'''
-def compute_batch(batch, args, model):
-    target_list = []
-    output_list = []
-    for (input, target) in batch:
-        input, target = input.to(args.device), target.to(args.device)
-        target_list.append(target)
-        output = model(input)
-        output_list.append(output)
-    output_batch = torch.stack(output_list, dim=0)
-    target_batch = torch.stack(target_list, dim=0)
-    return output_batch, target_batch
-'''
-
 def compute_batch(batch, args, model):
     target_list = []
     output_list = []
