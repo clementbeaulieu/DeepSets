@@ -1,5 +1,7 @@
 import torch
 import numpy as np
+import math
+import json
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
@@ -150,6 +152,12 @@ def make_meters(num_classes=2):
     meters_dict = {
         'loss': AverageMeter(),
         'acc1': AverageMeter(),
+        'mae': AverageMeter(),
+        'mse': AverageMeter(),
+        'rmse': AverageMeter(),
+        'set_class_correct': ValueMeter(), # number of correct instances per class of set size
+        'set_class_total': ValueMeter(), # total of instances per class of set size
+        'set_mAP': ValueMeter(), # mean Average Precision for the classes of set sizes
         'mAP': AverageMeter(),
         'meanIoU': ValueMeter(),
         'acc_class': ValueMeter(),
@@ -160,6 +168,19 @@ def make_meters(num_classes=2):
         'confusion_matrix': ConfusionMeter(num_classes),
     }
     return meters_dict
+
+def save_meters(meters, fn, epoch=0):
+
+    logged = {}
+    for name, meter in meters.items():
+        logged[name] = meter.value()
+
+    if epoch > 0:
+        logged['epoch'] = epoch
+
+    print(f'Saving meters to {fn}')
+    with open(fn, 'w') as f:
+        json.dump(logged, f)
 
 def accuracy_classif(output, target, topk=1):
     """Computes the precision@k for the specified values of k"""
@@ -194,23 +215,79 @@ def accuracy_regression(output, target):
     rmse = (output - target).pow(2).sqrt()
     return mae, mse, rmse
 
-def digitsum_score(output, target):
+def evaluate(hist):
+    acc = np.diag(hist).sum() / hist.sum()
+    acc_cls = np.diag(hist) / hist.sum(axis=1)
+    acc_cls = np.nanmean(acc_cls)
+    iu = np.diag(hist) / (hist.sum(axis=1) + hist.sum(axis=0) - np.diag(hist)+1e-10)
+    mean_iu = np.nanmean(iu)
+    freq = hist.sum(axis=1) / (hist.sum()+ 1e-10)
+    fwavacc = (freq[freq > 0] * iu[freq > 0]).sum()
+    return acc, acc_cls, mean_iu, fwavacc
+
+
+def fast_hist(pred, label, n):
+    k = (label >= 0) & (label < n)
+    return np.bincount(
+        n * label[k].astype(int) + pred[k], minlength=n ** 2).reshape(n, n)
+
+def per_class_iu(hist):
+    return np.diag(hist) / (hist.sum(1) + hist.sum(0) - np.diag(hist)+ 1e-10)
+
+def digitsum_score(output, target): #set_score
     output = output.data
     target = target.data
-    torch.round(output)
-    torch.round(target)
+    
+    pred = torch.round(output)
+    buff_label = torch.round(target)
 
-    '''
-    output = output.t()
-    correct = output.eq(target.view(1, -1).expand_as(output))
-
-    correct_k = correct[:1].view(-1).float().sum(0)
-    correct_k.mul_(1.0 / batch_size)
-
-    res = correct_k.clone()
-
-    return res.item(), output, target
-    '''
     batch_size = target.size(0)
-    acc = torch.sum(output == target, dtype=torch.double)
-    return acc.item()/batch_size
+    correct_batch = (pred == buff_label).sum().double().item()
+
+    acc_batch = correct_batch/batch_size
+
+    return acc_batch, pred, buff_label
+
+def set_acc_class(pred, buff_label, batch_size, input_sizes, max_size):
+    class_correct_batch = torch.zeros(max_size + 1)
+    class_total_batch = torch.zeros(max_size + 1)
+    c = (pred == buff_label)
+    for j in range(batch_size):
+        item_size = input_sizes[j]
+        class_correct_batch[item_size] += c[j].item()
+        class_total_batch[item_size] += 1.0
+    return class_correct_batch, class_total_batch
+
+def set_mAP(meters, min_size, max_size, weight='exp'):
+    set_class_correct = meters['set_class_correct'].val
+    set_class_total = meters['set_class_total'].val
+    
+    set_mAP = 0.0
+
+    length = max_size - min_size + 1
+
+    if weight == 'mean':
+        mean_weight = torch.zeros(max_size+1)
+        for i in range(min_size, max_size+1):
+            id_weight = 1.0/length
+        weight = mean_weight
+
+    if weight == 'linear':
+        linear_weight = torch.zeros(max_size+1)
+        for i in range(min_size, max_size+1):
+            linear_weight[i] = - 1.0/(length * (length - 1)) * (i - min_size) + 3.0 / (2.0 * length)
+        weight = linear_weight
+
+    if weight == 'exp':
+        exp_weight = torch.zeros(max_size+1)
+        gamma = 1.0/max_size
+        alpha = (math.exp(- gamma * (max_size+1)) - math.exp(- gamma * min_size))/(math.exp(- gamma) - 1.0)
+        for i in range(min_size, max_size+1):
+            exp_weight[i] = math.exp(- gamma * i)/alpha
+        weight = exp_weight
+
+    for i in range(min_size, max_size + 1):
+        if (set_class_total[i] != 0):
+            set_mAP += weight[i] * set_class_correct[i]/set_class_total[i]
+
+    return set_mAP

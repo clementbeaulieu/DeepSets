@@ -70,7 +70,7 @@ class DigitSumImageLoader(Dataset):
             img_list.append(img.numpy()[0])
         
         show_images(img_list)
-    
+
     def get_label(self, item):
         return self.__getitem__(item)[1]
 

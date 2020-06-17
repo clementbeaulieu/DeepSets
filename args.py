@@ -10,7 +10,11 @@ def parse_args():
 
     # name of the experiment
     parser.add_argument('--name', default='digitsum', type=str, help='name of experiment')
-    parser.add_argument('--task-type', default='regression', type=str, help='type of learning task (regression, classification or unsupervised)')
+    parser.add_argument('--train-type', default='regression', type=str, help='type of learning task (regression, classification or unsupervised)')
+    parser.add_argument('--val-type', default='regression', type=str, help='type of validation task (regression, classification, unsupervised or customed)')
+    parser.add_argument('--test-type', default='regression', type=str, help='type of test task (regression, classification, unsupervised or customed)')
+    parser.add_argument('--print-freq-train', type=int, default=10, help='print freq of batch values on training')
+    parser.add_argument('--print-freq-val', type=int, default=10, help='print freq of batch values on training')
 
     # name of the dataset used in the experiment
     parser.add_argument('--dataset', default='digitsum_image', type=str, help='name of dataset to train upon')
@@ -22,11 +26,16 @@ def parse_args():
     # model settings
     parser.add_argument('--arch', type=str, default='digitsum_image', help='name of the architecture to be used')
     parser.add_argument('--model-name', type=str, default='digitsum_image', help='name of the model to be used')
+    parser.add_argument('--resume', default='', type=str, metavar='PATH',
+                        help='which checkpoint to resume from. possible values["latest", "best", epoch]')
 
     # params for digitsum image experiment
-    parser.add_argument('--min-size', type=int, default = 5, help='min size for set sizes')
-    parser.add_argument('--max-size', type=int, default = 20, help='max size for set sizes')
-    parser.add_argument('--dataset-size', type=int, default = 10000, help='size of the dataset of sets')
+    parser.add_argument('--min-size-train', type=int, default = 2, help='min size for train set sizes')
+    parser.add_argument('--max-size-train', type=int, default = 10, help='max size for train set sizes')
+    parser.add_argument('--min-size-val', type=int, default = 5, help='min size validation/test for set sizes')
+    parser.add_argument('--max-size-val', type=int, default = 50, help='max size validation/test for set sizes')
+    parser.add_argument('--dataset-size-train', type=int, default = 100000, help='size of the train dataset of sets')
+    parser.add_argument('--dataset-size-val', type=int, default = 10000, help='size of the validation/test dataset of sets')
 
     # params for classification tasks
     parser.add_argument('--num-classes', default=0, type=int)
@@ -47,6 +56,7 @@ def parse_args():
     parser.add_argument('--criterion', default='mse', type=str, help='criterion to optimize')
 
     # misc settings
+    parser.add_argument('--seed', type=int, default=42, metavar='S', help='random seed (default: 42)')
     parser.add_argument('--disable-cuda', action='store_true', default=False, help='disables CUDA training / using only CPU')
     parser.add_argument('--tensorboard', dest='tensorboard', action='store_true',default=False, help='Use tensorboard to track and plot')
 
@@ -55,7 +65,8 @@ def parse_args():
     # update args
     args.data_dir = '{}/{}'.format(args.root_dir, args.dataset)
     args.log_dir = '{}/runs/{}/'.format(args.data_dir, args.name)
-
+    #args.res_dir = '%s/runs/%s/res' % (args.data_dir, args.name)
+    args.out_pred_dir = '%s/runs/%s/pred' % (args.data_dir, args.name)
 
     args.cuda = not args.disable_cuda and torch.cuda.is_available()
     args.device = 'cuda' if args.cuda else 'cpu'

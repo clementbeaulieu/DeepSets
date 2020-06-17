@@ -1,9 +1,31 @@
 import os
-
-import numpy as np
-import torch
-import matplotlib
+from PIL import Image
+import json
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.ticker as ticker
 import matplotlib.pyplot as plt
+
+import torch
+import torchvision
+import torch.backends.cudnn as cudnn
+
+def setup_env(args):
+    torch.manual_seed(args.seed)
+    if args.cuda:
+        torch.cuda.manual_seed(args.seed)
+        cudnn.benchmark = True
+
+# create necessary folders and config files
+def init_output_env(args):
+    check_dir(os.path.join(args.data_dir,'runs'))
+    check_dir(args.log_dir)
+    check_dir(os.path.join(args.log_dir,'pics'))
+    check_dir(os.path.join(args.log_dir,'tensorboard'))
+    #check_dir(os.path.join(args.log_dir, 'watch'))
+    #check_dir(args.res_dir)
+    with open(os.path.join(args.log_dir, 'config.json'), 'w') as f:
+        json.dump(args.__dict__, f)
 
 def show_images(images, cols = 1, titles = None):
     """Display a list of images in a single figure with matplotlib.
@@ -43,11 +65,15 @@ def check_dir(dir_path):
 def count_params(model):
    return sum([p.data.nelement() for p in model.parameters()])
 
+def save_res_list(res_list, fn):
+    with open(fn, 'w') as f:
+        json.dump(res_list, f)
+
 def compute_batch(batch, args, model):
     target_list = []
     output_list = []
-    batch_size=len(batch)
-    target_size=batch[0][1].size()[0]
+    #batch_size=len(batch)
+    #target_size=batch[0][1].size()[0]
     for (input, target) in batch:
         input, target = input.to(args.device), target.to(args.device)
         target_list.append(target)
@@ -58,3 +84,9 @@ def compute_batch(batch, args, model):
     output_batch = output_batch.squeeze(1)
     target_batch = target_batch.squeeze(1)
     return output_batch, target_batch
+
+def compute_input_sizes(batch):
+    input_sizes = []
+    for (input, _) in batch:
+        input_sizes.append(input.size(0))
+    return input_sizes
