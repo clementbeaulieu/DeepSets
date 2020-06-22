@@ -25,7 +25,7 @@ def parse_args():
 
     # model settings
     parser.add_argument('--arch', type=str, default='digitsum_image', help='name of the architecture to be used')
-    parser.add_argument('--model-name', type=str, default='digitsum_image', help='name of the model to be used')
+    parser.add_argument('--model-name', type=str, default='digitsum_image50', help='name of the model to be used')
     parser.add_argument('--resume', default='', type=str, metavar='PATH',
                         help='which checkpoint to resume from. possible values["latest", "best", epoch]')
 

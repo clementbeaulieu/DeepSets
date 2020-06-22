@@ -126,17 +126,17 @@ def main():
                                                     max_size=args.max_size_val, dataset_size=args.dataset_size_val), batch_size=args.batch_size,
                                                   shuffle=False, num_workers=args.workers, collate_fn=lambda x: x, pin_memory=True)
         trainer.test(args, test_loader, model, criterion, args.start_epoch,
-                     eval_score=metrics.digitsum_score, output_dir=args.out_pred_dir, has_gt=True, print_freq=args.print_freq_val)
+                     eval_score=metrics.get_score(args.test_type), output_dir=args.out_pred_dir, has_gt=True, print_freq=args.print_freq_val)
         sys.exit()
 
     is_best = True
     for epoch in range(args.start_epoch, args.epochs + 1):
         print('Current epoch:', epoch)
 
-        trainer.train(args, train_loader, model, criterion, optimizer, exp_logger, epoch, eval_score=metrics.accuracy_regression, print_freq=args.print_freq_train, tb_writer=tb_writer)
+        trainer.train(args, train_loader, model, criterion, optimizer, exp_logger, epoch, eval_score=metrics.get_score(args.train_type), print_freq=args.print_freq_train, tb_writer=tb_writer)
 
         # evaluate on validation set
-        mAP, val_loss = trainer.validate(args, val_loader, model, criterion, exp_logger, epoch, eval_score=metrics.digitsum_score, print_freq=args.print_freq_val, tb_writer=tb_writer)
+        mAP, val_loss = trainer.validate(args, val_loader, model, criterion, exp_logger, epoch, eval_score=metrics.get_score(args.val_type), print_freq=args.print_freq_val, tb_writer=tb_writer)
 
         # Update learning rate
         if scheduler is None:

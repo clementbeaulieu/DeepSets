@@ -291,3 +291,11 @@ def set_mAP(meters, min_size, max_size, weight='exp'):
             set_mAP += weight[i] * set_class_correct[i]/set_class_total[i]
 
     return set_mAP
+
+'''Return the corresponding score to the task-type.'''
+def get_score(eval_score):
+    return{
+        'regression': accuracy_regression,
+        'classification': accuracy_classif,
+        'digitsum': digitsum_score,
+    }[eval_score]

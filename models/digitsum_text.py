@@ -1,63 +1,52 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from models.deepsets_invariant import deepsets_invariant
+from models.deepsets_invariant import DeepSetsInvariant
 
-class DigitSumPhi(nn.Module):
+class DigitSumTextPhi(nn.Module):
     def __init__(self, embed_size: int):
         super().__init__()
         self.embed_size = embed_size
 
-        self.f1 = nn.Embedding(10, embed_size)
-        self.f2 = nn.Linear(embed_size, 50)
-        self.f3 = nn.ReLU()
-        self.f4 = nn.Linear(50, 10)
-        self.f5 = nn.ReLU()
+        self.embed = nn.Embedding(10, self.embed_size)
+        #self.embed.weight.requires_grad=False
+        self.fc1 = nn.Linear(embed_size, 50)
+        self.dropout_fc1 = nn.Dropout()
+        self.fc2 = nn.Linear(50, 10)
+        self.dropout_fc2 = nn.Dropout()
 
     def forward(self, x):
-        x = self.f1(x)
-        x = self.f2(x)
-        x = self.f3(x)
-        x = self.f4(x)
-        out = self.f5(x)
-        return out
+        #x = x.squeeze(1)
+        #x = self.embed(x)
+        x = self.fc1(x)
+        x = self.dropout_fc1(x)
+        x = F.relu(x)
+        x = self.fc2(x)
+        x = F.relu(x)
+        x = self.dropout_fc2(x)
+        return x
 
-class DigitSumRho(nn.Module):
-    def __init__(self, in_size: int, out_size: int):
+class DigitSumTextRho(nn.Module):
+    def __init__(self):
         super().__init__()
-        self.in_size = in_size
-        self.out_size = out_size
 
-        self.f1 = nn.Linear(self.in_size, 10)
-        self.f2 = nn.ReLU()
-        self.f3 = nn.Linear(10, self.out_size)
+        self.fc1 = nn.Linear(10, 10)
+        self.fc2 = nn.Linear(10, 1)
 
     def forward(self, x):
-        x = self.f1(x)
-        x = self.f2(x)
-        out = self.f3(x)
-        return out
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.fc2(x)
+        x = F.relu(x)
+        return x
 
-class DigitSumText(nn.Module):
-    def __init__(self, embed_size):
-        super().__init__()
-        self.embed_size = embed_size
-
-        self.phi = DigitSumPhi(embed_size)
-        self.rho = DigitSumRho(10, 1)
-
-        self.deepset = deepsets_invariant.DeepSetsInvariant(self.phi, self.rho)
-
-    def forward(self, x):
-        out = self.deepset.forward(x)
-        return out
-        
-def digitsum_text(embed_size):
-    model = DigitSumText(embed_size)
+def digitsum_text50(embed_size=100):
+    phi = DigitSumTextPhi(embed_size)
+    rho = DigitSumTextRho()
+    model = DeepSetsInvariant(phi, rho, embedding=True)
     return model
 
-'''def digitsum_text(model_name, num_classes, input_channels, pretrained=False):
+def digitsum_text(model_name):
     return{
-        'digitsum_text': digitsum_text(num_classes=num_classes, input_channels=input_channels),
+        'digitsum_text50': digitsum_text50(),
     }[model_name]
-    '''

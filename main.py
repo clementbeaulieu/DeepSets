@@ -5,6 +5,7 @@ import torch.nn.functional as F
 from tqdm import tqdm
 #from torch import FloatTensor
 import time
+import sys
 
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda:0" if use_cuda else "cpu")
@@ -43,6 +44,7 @@ class DigitSumPhi(nn.Module):
 
     def forward(self, x):
         x = self.f1(x)
+        x = x.type(torch.FloatTensor)
         x = self.f2(x)
         x = self.f3(x)
         x = self.f4(x)
@@ -162,6 +164,10 @@ def train(train_loader, model, criterion, optimizer, epoch, eval_score = None, p
         '''# print(f'{i} - {input.size()} - {target_class.size()}')
         batch_size = input.size(0)
         '''
+
+        #print(input.size())
+
+        #sys.exit()
 
         input, target = input.to(device), target.to(device)
 

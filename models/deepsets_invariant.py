@@ -10,11 +10,12 @@ def default_aggregator(x):
 
 class DeepSetsInvariant(nn.Module):
 
-    def __init__(self, phi: nn.Module, rho: nn.Module, aggregator=default_aggregator):
+    def __init__(self, phi: nn.Module, rho: nn.Module, aggregator=default_aggregator, embedding=False):
         super().__init__()
         self.phi = phi
         self.rho = rho
         self.aggregator = aggregator
+        self.embedding = embedding
 
     def forward(self, x, debug=False):
         '''

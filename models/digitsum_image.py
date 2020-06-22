@@ -53,7 +53,7 @@ class DigitSumImageRho(nn.Module):
         #x = self.dropout_fc2(x)
         return x
 
-def digitsum_image100():
+def digitsum_image50():
     phi = DigitSumImagePhi()
     rho = DigitSumImageRho()
     model = DeepSetsInvariant(phi, rho)
@@ -61,5 +61,5 @@ def digitsum_image100():
 
 def digitsum_image(model_name):
     return{
-        'digitsum_image100': digitsum_image100(),
+        'digitsum_image50': digitsum_image50(),
     }[model_name]

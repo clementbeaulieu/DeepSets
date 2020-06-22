@@ -72,17 +72,26 @@ def save_res_list(res_list, fn):
 def compute_batch(batch, args, model):
     target_list = []
     output_list = []
+
     #batch_size=len(batch)
     #target_size=batch[0][1].size()[0]
+
     for (input, target) in batch:
         input, target = input.to(args.device), target.to(args.device)
+
+        if model.embedding:
+            input = input.squeeze(1)
+            input = model.phi.embed(input)
+        
+        input = input.requires_grad_()
         target_list.append(target)
         output = model(input)
         output_list.append(output)
+
     output_batch = torch.stack(output_list, dim=0)
     target_batch = torch.stack(target_list, dim=0)
     output_batch = output_batch.squeeze(1)
-    target_batch = target_batch.squeeze(1)
+    target_batch = target_batch.squeeze(1).type(torch.FloatTensor)
     return output_batch, target_batch
 
 def compute_input_sizes(batch):
