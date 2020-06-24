@@ -8,7 +8,7 @@ def get_model(args):
 
     if args.arch == 'digitsum_image':
         model = model_instance(args.model_name)
-    if args.arch == 'digitsum_text':
+    elif args.arch == 'digitsum_text':
         model = model_instance(args.model_name)
     else:
         raise 'Model {} not available.'.format(args.arch)
