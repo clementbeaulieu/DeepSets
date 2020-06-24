@@ -35,7 +35,7 @@ def train(args, train_loader, model, criterion, optimizer, logger, epoch, eval_s
         meters['data_time'].update(time.time()-end, n=batch_size)
 
         output_batch, target_batch = utils.compute_batch(batch, args, model)
-        output_batch, target_batch = output_batch.to(args.device), target_batch.to(args.device)
+        output_batch, target_batch = output_batch.to(args.device).requires_grad_(), target_batch.to(args.device)
 
         #print('output_batch: ', output_batch)
         #print('ouput_batch size: ', output_batch.size())
@@ -62,10 +62,6 @@ def train(args, train_loader, model, criterion, optimizer, logger, epoch, eval_s
                 meters['mae'].update(mae.mean().item(), n=batch_size)
                 meters['mse'].update(mse.mean().item(), n=batch_size)
                 #meters['rmse'].update(rmse.mean().item(), n=batch_size)
-
-            #if args.train_type == 'custom':
-            #    acc1 = eval_score(output_batch, target_batch)
-            #    meters['acc1'].update(acc1, n=batch_size)
 
         # measure elapsed time
         meters['batch_time'].update(time.time() - end, n=batch_size)
