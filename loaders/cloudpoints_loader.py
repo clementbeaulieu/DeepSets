@@ -3,6 +3,8 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
 
+import h5py
+
 idx2label = {
     0: 'airplane',
     1: 'bathtub',
@@ -48,6 +50,107 @@ idx2label = {
 
 classnames = [v for k,v in idx2label.items()]
 
+def load_h5(h5_filename):
+    f = h5py.File(h5_filename,'r')
+    data = f['data'][:]
+    label = f['label'][:]
+    return (data, label)
+
+def load_data(data_dir):
+    data_train0, label_train0 = load_h5(os.path.join(data_dir, 'ply_data_train0.h5'))
+    data_train1, label_train1 = load_h5(os.path.join(data_dir, 'ply_data_train1.h5'))
+    data_train2, label_train2 = load_h5(os.path.join(data_dir, 'ply_data_train2.h5'))
+    data_train3, label_train3= load_h5(os.path.join(data_dir, 'ply_data_train3.h5'))
+    data_train4, label_train4 = load_h5(os.path.join(data_dir, 'ply_data_train4.h5'))
+
+    data_test0, label_test0 = load_h5(os.path.join(data_dir, 'ply_data_test0.h5'))
+    data_test1, label_test1 = load_h5(os.path.join(data_dir, 'ply_data_test1.h5'))
+
+    train_data = np.concatenate([data_train0,data_train1,data_train2,data_train3,data_train4])
+    train_label = np.concatenate([label_train0,label_train1,label_train2,label_train3,label_train4])
+
+    test_data = np.concatenate([data_test0,data_test1])
+    test_label = np.concatenate([label_test0,label_test1])
+
+    return train_data, train_label, test_data, test_label
+
+def sample_cloud(data, nb_points, seed=None):
+    if seed is not None:
+        np.random.seed(seed)
+
+    N = data.shape[0]
+    M = data.shape[1]
+
+    sampled_data = np.zeros((N, nb_points, 3))
+
+    for i in range(N):
+        idx = np.random.choice(M, nb_points, replace=False)
+        sampled_data[i] = data[i][idx][:]
+    
+    return sampled_data
+
+def split(data, dataset_size, seed=None):
+    N = data.shape[0]
+
+    if seed is not None:
+        np.random.seed(seed)
+    
+    idx = np.random.choice(N, dataset_size, replace=False)
+    sampled_data = data[idx][:][:]
+
+    return sampled_data
+
+def rotate_z(theta, x):
+    theta = np.expand_dims(theta, 1)
+    outz = np.expand_dims(x[:,:,2], 2)
+    sin_t = np.sin(theta)
+    cos_t = np.cos(theta)
+    xx = np.expand_dims(x[:,:,0], 2)
+    yy = np.expand_dims(x[:,:,1], 2)
+    outx = cos_t * xx - sin_t*yy
+    outy = sin_t * xx + cos_t*yy
+    return np.concatenate([outx, outy, outz], axis=2)
+    
+def augment(x):
+    bs = x.shape[0]
+    #rotation
+    thetas = np.random.uniform(-0.1, 0.1, [bs,1])*np.pi
+    rotated = rotate_z(thetas, x)
+    #scaling
+    scale = np.random.rand(bs,1,3)*0.45 + 0.8
+    return rotated*scale
+
+def standardize(x):
+    clipper = np.mean(np.abs(x), (1,2), keepdims=True)
+    z = np.clip(x, -100*clipper, 100*clipper)
+    mean = np.mean(z, (1,2), keepdims=True)
+    std = np.std(z, (1,2), keepdims=True)
+    return (z-mean)/std
+
+class CloudPointsLoader(Dataset):
+
+    def __init__(self, data_dir, split, num_classes=40, nb_points=1000, train=True, do_standardize=True, do_augmentation=False, seed=None):
+        self.data_dir = data_dir
+        self.num_classes = num_classes
+        self.nb_points = nb_points
+        self.train = train
+        
+        if train:
+            self.data, self.label, _ , _ = load_data(data_dir)
+            self.data = sample_cloud(self.data, self.nb_points, seed)
+        else:
+            _, _, self.data, self.label = load_data(data_dir)
+            self.data = sample_cloud(self.data, self.nb_points, seed)
+
+
+
+
+
+
+
+
+
+'''
 class CloudPointsLoader(Dataset):
 
     def __init__(self, data_dir, split, num_classes=40, train = True, first_subsampling_dl=0.03, config=None, data_augmentation=True)):
@@ -118,7 +221,7 @@ class ModelNetH5Dataset(object):
         self.h5_files = getDataFiles(self.list_filename)
         self.reset()
     def reset(self):
-        ''' reset order of h5 files '''
+        ''' '''reset order of h5 files''' '''
         self.file_idxs = np.arange(0, len(self.h5_files))
         if self.shuffle:
             np.random.shuffle(self.file_idxs)
@@ -165,7 +268,7 @@ class ModelNetH5Dataset(object):
         return self._has_next_batch_in_file()
 
     def next_batch(self, augment=False):
-        ''' returned dimension may be smaller than self.batch_size '''
+        ''''''returned dimension may be smaller than self.batch_size ''''''
         start_idx = self.batch_idx * self.batch_size
         end_idx = min((self.batch_idx+1) * self.batch_size, self.current_data.shape[0])
 #        bsize = end_idx - start_idx
@@ -176,4 +279,4 @@ class ModelNetH5Dataset(object):
 #        if augment:
 #            data_batch = self._augment_batch_data(data_batch)
         return data_batch, label_batch
-    
+'''
