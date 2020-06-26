@@ -16,7 +16,7 @@ def parse_args():
     #parser.add_argument('--cur_epoch', default=1, type=int, help='cur epoch')
     #parser.add_argument('--nb_epochs', default=100, type=int, help='nb epochs')
     parser.add_argument('--bucket', default='gs://deepsets', type=str, help="bucket")
-    parser.add_argument('--backup-lapse', default=10000, type=int, help='backup lapse')
+    parser.add_argument('--backup-lapse', default=600, type=int, help='backup lapse')
 
     args = parser.parse_args()
 
@@ -26,7 +26,7 @@ class backup(Thread):
 
     def run(self):
         while True:
-            bashcommand = "gsutil cp -r {0}/{1} {2}".format(path, name, bucket)
+            bashcommand = "gsutil cp -r .{0}/{1} {2}".format(path, name, bucket)
             os.system(bashcommand)
             time.sleep(backup_lapse)
 
@@ -51,4 +51,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-#python3 download.py --path /home/jupyter/data/digitsum_image/runs --name digitsum_image_batch64_val210 --bucket gs://deepsets --backuplapse 1000
+#python3 download.py --path /home/jupyter/data/digitsum_image/runs --name digitsum_image_batch64_val210 --bucket gs://deepsets --backuplapse 600
