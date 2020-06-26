@@ -258,7 +258,7 @@ def set_acc_class(pred, buff_label, batch_size, input_sizes, max_size):
         class_total_batch[item_size] += 1.0
     return class_correct_batch, class_total_batch
 
-def set_mAP(meters, min_size, max_size, weight='exp'):
+def set_mAP(meters, min_size, max_size, weight='mean'):
     set_class_correct = meters['set_class_correct'].val
     set_class_total = meters['set_class_total'].val
     

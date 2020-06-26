@@ -26,7 +26,7 @@ def get_optimizer(args, model):
         scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=args.lr_decay)    
     elif args.scheduler == 'ReduceLROnPlateau':
         print(f' --- Setting lr scheduler to ReduceLROnPlateau ---') 
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=args.lr_decay, patience=args.step)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, min_lr=0.000001, factor=args.lr_decay, patience=args.step)
     else:
         raise f'Scheduler {args.scheduler} not available'
     
