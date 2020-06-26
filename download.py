@@ -22,19 +22,11 @@ def parse_args():
 
     return args
 
-def download():
-    bashcommand = "sudo zip -r {0}.zip {0}".format(name)
-    os.system(bashcommand)
-    bashcommand = "gsutil cp {0}.zip {1}".format(name, bucket)
-    os.system(bashcommand)
-
 class backup(Thread):
 
     def run(self):
         while True:
-            bashcommand = "sudo zip -r {0}.zip {0}".format(name)
-            os.system(bashcommand)
-            bashcommand = "gsutil cp {0}.zip {1}".format(name, bucket)
+            bashcommand = "gsutil cp -r .{0}/{1} {2}".format(path, name, bucket)
             os.system(bashcommand)
             time.sleep(backup_lapse)
 
@@ -51,11 +43,12 @@ def main():
 
     global path, name, bucket, backup_lapse
 
-    path, name, bucket, backup_lapse = args.path, args.name, args.bucket, args.backup_lapse
+    path, name, bucket, backup_lapse = args.name, args.bucket, args.backup_lapse
 
-    os.chdir(path)
     backup_thread = backup()
     backup_thread.start()
 
 if __name__ == '__main__':
     main()
+
+#python3 download.py --path /home/jupyter/data/digitsum_image/runs --name digitsum_image_batch64_val210
