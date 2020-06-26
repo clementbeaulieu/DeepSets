@@ -42,7 +42,7 @@ class DigitSumImageRho(nn.Module):
         self.fc1 = nn.Linear(10,10)
         #self.dropout_fc1 = nn.Dropout()
         self.fc2 = nn.Linear(10,1)
-        self.dropout_fc2 = nn.Dropout()
+        #self.dropout_fc2 = nn.Dropout()
     
     def forward(self, x):
         x = self.fc1(x)
@@ -50,7 +50,7 @@ class DigitSumImageRho(nn.Module):
         #x = self.dropout_fc1(x)
         x = self.fc2(x)
         x = F.relu(x)
-        x = self.dropout_fc2(x)
+        #x = self.dropout_fc2(x)
         return x
 
 def digitsum_image50():
