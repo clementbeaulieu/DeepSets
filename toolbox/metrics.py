@@ -269,7 +269,7 @@ def set_mAP(meters, min_size, max_size, weight='mean'):
     if weight == 'mean':
         mean_weight = torch.zeros(max_size+1)
         for i in range(min_size, max_size+1):
-            id_weight = 1.0/length
+            mean_weight = 1.0/length
         weight = mean_weight
 
     if weight == 'linear':
