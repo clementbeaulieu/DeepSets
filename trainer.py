@@ -254,7 +254,7 @@ def validate_digitsum(args, val_loader, model, criterion, logger, epoch, eval_sc
     #acc = correct/total
 
     
-    set_mAP = metrics.set_mAP(meters, args.min_size_val, args.max_size_val)
+    set_mAP = metrics.set_mAP(meters, args.min_size_val, args.max_size_val, weight=args.set_weight)
     if isinstance(set_mAP, torch.Tensor):
         set_mAP = set_mAP.cpu().data.item()
     meters['set_mAP'].update(set_mAP)
@@ -443,7 +443,7 @@ def test_digitsum(args, test_loader, model, criterion, epoch, eval_score, output
                       score=meters['acc1']), flush=True)
     
     if eval_score is not None:
-        set_mAP = metrics.set_mAP(meters, args.min_size_val, args.max_size_val)
+        set_mAP = metrics.set_mAP(meters, args.min_size_val, args.max_size_val, weight=args.set_weight)
         if isinstance(set_mAP, torch.Tensor):
             set_mAP = set_mAP.cpu().data.item()
         meters['set_mAP'].update(set_mAP)

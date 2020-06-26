@@ -36,6 +36,7 @@ def parse_args():
     parser.add_argument('--max-size-val', type=int, default = 50, help='max size validation/test for set sizes')
     parser.add_argument('--dataset-size-train', type=int, default = 100000, help='size of the train dataset of sets')
     parser.add_argument('--dataset-size-val', type=int, default = 10000, help='size of the validation/test dataset of sets')
+    parser.add_argument('--set-weight', type=str, default='mean', help='default set_weight metrics for set_MAP score (mean, linear or exp)')
 
     # params for classification tasks
     parser.add_argument('--num-classes', default=0, type=int)
