@@ -43,7 +43,7 @@ def main():
 
     global path, name, bucket, backup_lapse
 
-    path, name, bucket, backup_lapse = args.name, args.bucket, args.backup_lapse
+    path, name, bucket, backup_lapse = args.path, args.name, args.bucket, args.backup_lapse
 
     backup_thread = backup()
     backup_thread.start()
@@ -51,4 +51,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-#python3 download.py --path /home/jupyter/data/digitsum_image/runs --name digitsum_image_batch64_val210
+#python3 download.py --path /home/jupyter/data/digitsum_image/runs --name digitsum_image_batch64_val210 --bucket gs://deepsets --backuplapse 1000
