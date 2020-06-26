@@ -263,7 +263,7 @@ def validate_digitsum(args, val_loader, model, criterion, logger, epoch, eval_sc
     #meters['set_mAP'].update(meters['acc1'].avg)
 
     print(' * Validation set: \t'
-        'Average loss {:.4f}, Accuracy {:.3f}%\n'.format(meters['loss'].avg, meters['acc1'].avg))
+        'Average loss {:.4f}, Accuracy {:.3f}\n'.format(meters['loss'].avg, meters['acc1'].avg))
 
     print('Accuracy per class of set size:')
     for i in range(args.min_size_val, args.max_size_val + 1):
