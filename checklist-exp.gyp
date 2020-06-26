@@ -22,7 +22,7 @@ python3 run.py --name digitsum_image_batch16 --train-type regression --val-type 
 
 #Batch Size = 8.
 
--- TO BE DONE. With first model. Validation 5/50.
+-- IN PROGRESS on instance-p4. With first model. Validation 5/50.
 python3 run.py --name digitsum_image_batch8 --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 1000 --print-freq-val 100 --dataset digitsum_image --root-dir /home/jupyter/data --min-size-train 2 --max-size-train 10 --min-size-val 5 --max-size-val 50 --dataset-size-train 100000 --dataset-size-val 10000 --set-weight exp --workers 8 --step 20 --batch-size 8 --epochs 200 --lr 0.01 --wd 0.005 --scheduler ReduceLROnPlateau --lr-decay 0.5 --tensorboard
 
 #Batch Size = 1.
@@ -91,13 +91,13 @@ python3 run.py --name digitsum_image_lowvar --train-type regression --val-type d
 
 #All dropouts in phi. With val 5/5 and val 2/10.
 
--- IN PROGRESS. Validation 5/5. With 3rd model.
+-- IN PROGRESS on local. Validation 5/5. With 3rd model.
 python3 run.py --name digitsum_image_lowvar_fulldropouts --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10 --print-freq-val 100 --dataset digitsum_image --root-dir /Users/clementbeaulieu/Desktop/Polytechnique/UERecherche/DeepSets/data --arch digitsum_image --model-name digitsum_image50 --min-size-train 5 --max-size-train 5 --min-size-val 5 --max-size-val 5 --dataset-size-train 20000 --dataset-size-val 2000 --workers 8 --step 10 --batch-size 64 --epochs 100 --scheduler ReduceLROnPlateau --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard
 #TODO Testing resume from best.
 python3 run.py --name digitsum_image_lowvar_fulldropouts --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10 --print-freq-val 100 --dataset digitsum_image --root-dir /Users/clementbeaulieu/Desktop/Polytechnique/UERecherche/DeepSets/data --arch digitsum_image --model-name digitsum_image50 --resume best --min-size-train 5 --max-size-train 5 --min-size-val 2 --max-size-val 10 --dataset-size-train 20000 --dataset-size-val 20000 --workers 8 --step 10 --batch-size 64 --epochs 100 --scheduler ReduceLROnPlateau --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard
 
--- IN PROGRESS. Validation 5/5. With 3rd model. Low batch size = 8.
-python3 run.py --name digitsum_image_lowvar_fulldropouts_batch8 --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10 --print-freq-val 100 --dataset digitsum_image --root-dir /Users/clementbeaulieu/Desktop/Polytechnique/UERecherche/DeepSets/data --arch digitsum_image --model-name digitsum_image50 --min-size-train 5 --max-size-train 5 --min-size-val 5 --max-size-val 5 --dataset-size-train 20000 --dataset-size-val 2000 --workers 8 --step 10 --batch-size 8 --epochs 100 --scheduler ReduceLROnPlateau --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard
+-- IN PROGRESS on instance-16cpu. Validation 5/5. With 3rd model. Low batch size = 8.
+python3 run.py --name digitsum_image_lowvar_fulldropouts_batch8 --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10 --print-freq-val 100 --dataset digitsum_image --root-dir /home/jupyter/data --arch digitsum_image --model-name digitsum_image50 --min-size-train 5 --max-size-train 5 --min-size-val 5 --max-size-val 5 --dataset-size-train 20000 --dataset-size-val 2000 --workers 8 --step 10 --batch-size 8 --epochs 100 --scheduler ReduceLROnPlateau --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard
 #TODO Testing resume from best.
 python3 run.py --name digitsum_image_lowvar_fulldropouts --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10 --print-freq-val 100 --dataset digitsum_image --root-dir /Users/clementbeaulieu/Desktop/Polytechnique/UERecherche/DeepSets/data --arch digitsum_image --model-name digitsum_image50 --resume best --min-size-train 5 --max-size-train 5 --min-size-val 2 --max-size-val 10 --dataset-size-train 20000 --dataset-size-val 20000 --workers 8 --step 10 --batch-size 64 --epochs 100 --scheduler ReduceLROnPlateau --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard
 
