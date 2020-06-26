@@ -26,7 +26,7 @@ class backup(Thread):
 
     def run(self):
         while True:
-            bashcommand = "gsutil cp -r .{0}/{1} {2}".format(path, name, bucket)
+            bashcommand = "gsutil cp -r {0}/{1} {2}".format(path, name, bucket)
             os.system(bashcommand)
             time.sleep(backup_lapse)
 
