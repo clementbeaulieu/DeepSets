@@ -288,7 +288,7 @@ def set_mAP(meters, min_size, max_size, weight='mean'):
 
     for i in range(min_size, max_size + 1):
         if (set_class_total[i] != 0):
-            set_mAP += 1.0 * set_class_correct[i]/set_class_total[i]
+            set_mAP += weight[i].data.item() * set_class_correct[i]/set_class_total[i]
 
     return set_mAP
 
