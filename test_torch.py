@@ -69,7 +69,7 @@ def compute_batch(batch, model):
     target_batch = target_batch.squeeze(1).type(torch.FloatTensor)
     return output_batch, target_batch
 
-data_dir = 'Users/clementbeaulieu/'
+data_dir = 'Users/clementbeaulieu/Desktop/test'
 dataloader = torch.utils.data.DataLoader(DigitSumTextLoader(data_dir, 'train', 2, 5, 1), batch_size=1, shuffle=True, num_workers=4, collate_fn=lambda x: x, pin_memory=True)
 
 import torch.nn as nn

@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from models.deepsets_invariant import DeepSetsInvariant
+from models.deepsets_invariant_batch import DeepSetsInvariantBatch
 
 class DigitSumImagePhi(nn.Module):
 
@@ -59,7 +60,14 @@ def digitsum_image50():
     model = DeepSetsInvariant(phi, rho)
     return model
 
+def digitsum_image50_batch():
+    phi = DigitSumImagePhi()
+    rho = DigitSumImageRho()
+    model = DeepSetsInvariantBatch(phi, rho)
+    return model
+
 def digitsum_image(model_name):
     return{
         'digitsum_image50': digitsum_image50(),
+        'digitsum_image50_batch': digitsum_image50_batch(),
     }[model_name]

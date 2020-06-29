@@ -99,3 +99,23 @@ def compute_input_sizes(batch):
     for (input, _) in batch:
         input_sizes.append(input.size(0))
     return input_sizes
+
+def batch(batch, args, model):
+
+    input_batch = []
+    target_list = []
+
+    for (input, target) in batch:
+        input, target = input.to(args.device), target.to(args.device)
+
+        if model.embedding:
+            input = input.squeeze(1)
+            input = model.phi.embed(input)
+
+        input = input.requires_grad_()
+        input_batch.append(input)
+        target_list.append(target)
+    
+    target_batch = torch.stack(target_list, dim=0)
+    target_batch = target_batch.squeeze(1).type(torch.FloatTensor)
+    return input_batch, target_batch
