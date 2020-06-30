@@ -13,11 +13,11 @@ This deep learning project provides a scalable framework for Deep Sets architect
 ## Models.
 
 - DeepSets Invariant.
-+ DigitSumImage
-+ DigitSumText
+  + DigitSumImage
+  + DigitSumText
 
 - DeepSets Equivariant.
-+ PointCloud
+  + PointCloud
 
 ## Project structure
 
