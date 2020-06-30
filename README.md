@@ -26,24 +26,24 @@ The project is structured as following:
 ```bash
 .
 ├── loaders
-|   └── dataset selector
-|   └── digitsum_image_loader.py # loading and pre-processing digitsum_image data
-|	└── digitsum_text_loader.py # loading and pre-processing digitsum_text data
-|	└── cloudpoints_loader.py # loading and pre-processing cloudpoints data
+|  └── dataset selector
+|  └── digitsum_image_loader.py # loading and pre-processing digitsum_image data
+|	 └── digitsum_text_loader.py # loading and pre-processing digitsum_text data
+|	 └── cloudpoints_loader.py # loading and pre-processing cloudpoints data
 ├── models
-|   └── architecture selector
-|   └── deepsets_invariant.py # generic DeepSets Invariant architecture
-|	└── deepsets_invariant_batch.py # generic DeepSets Invariant architecture, better handling batches. Only used in run_batch.py
-|	└── deepsets_equivariant.py # generic DeepSets Equivariant architecture
-|   └── digitsum_image.py # digitsum image model
-|   └── digitsum_text.py # digitsum text model
-|	└── cloudpoints.py # cloud points model
+|  └── architecture selector
+|  └── deepsets_invariant.py # generic DeepSets Invariant architecture
+|	 └── deepsets_invariant_batch.py # generic DeepSets Invariant architecture, better handling batches. Only used in run_batch.py
+|	 └── deepsets_equivariant.py # generic DeepSets Equivariant architecture
+|  └── digitsum_image.py # digitsum image model
+|  └── digitsum_text.py # digitsum text model
+|	 └── cloudpoints.py # cloud points model
 ├── toolbox
-|	└── losses.py  # loss selector
-|	└── optimizer.py  # optimizer selector
-|   └── logger.py  # keeping track of most results during training and storage to static .html file
-|   └── metrics.py # computing scores and main values to track
-|   └── utils.py   # various utility functions
+|	 └── losses.py  # loss selector
+|	 └── optimizer.py  # optimizer selector
+|  └── logger.py  # keeping track of most results during training and storage to static .html file
+|  └── metrics.py # computing scores and main values to track
+|  └── utils.py   # various utility functions
 ├── run.py # main file from the project serving for calling all necessary functions for training and testing
 ├── run_batch.py # slight modification of run.py function, better handling batches
 ├── args.py # parsing all command line arguments for experiments
