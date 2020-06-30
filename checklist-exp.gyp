@@ -6,8 +6,10 @@
 
 -- DONE. With 1st model. Validation 5/50.
 python3 run.py --name digitsum_image_batch64 --train-type regression --val-type digitsum --print-freq-train 1000 --print-freq-val 100 --dataset digitsum_image --root-dir /home/jupyter/data --min-size-train 2 --max-size-train 10 --min-size-val 5 --max-size-val 50 --dataset-size-train 100000 --dataset-size-val 10000 --workers 8 --step 20 --batch-size 64 --epochs 200 --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard
--- IN PROGRESS on instance-p4. With 1st model. Validation 2/10. Mean set_MAP.
+-- DONE on instance-p4. With 1st model. Validation 2/10. Mean set_MAP.
 python3 run.py --name digitsum_image_batch64_val210_reducelronplateau --train-type regression --val-type digitsum --print-freq-train 1000 --print-freq-val 100 --dataset digitsum_image --root-dir /home/jupyter/data --min-size-train 2 --max-size-train 10 --min-size-val 2 --max-size-val 10 --set-weight mean --dataset-size-train 100000 --dataset-size-val 10000 --workers 8 --step 20 --batch-size 64 --epochs 200 --lr 0.001 --wd 0.005 --scheduler ReduceLROnPlateau --lr-decay 0.5 --tensorboard
+-- DONE on instance-p4. With 1st model. Validation 2/10. Mean set_MAP.
+python3 run_batch.py --name digitsum_image_batch64_val210_reducelronplateau_batch --train-type regression --val-type digitsum --print-freq-train 1000 --print-freq-val 100 --dataset digitsum_image --root-dir /home/jupyter/data --arch digitsum_image --model-name digitsum_image50_batch --min-size-train 2 --max-size-train 10 --min-size-val 2 --max-size-val 10 --set-weight mean --dataset-size-train 100000 --dataset-size-val 10000 --workers 8 --step 20 --batch-size 64 --epochs 200 --lr 0.001 --wd 0.005 --scheduler ReduceLROnPlateau --lr-decay 0.5 --tensorboard
 
 
 -- INTERRUPTED. With last layer dropout. With 2nd model.
@@ -37,7 +39,7 @@ python3 run.py --name digitsum_image_batch1 --train-type regression --val-type d
 Resume from latest. python3 run.py --name digitsum_image_batch1_stepLR --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10000 --print-freq-val 1000 --dataset digitsum_image --test --root-dir /home/jupyter/data --resume latest --min-size-train 2 --max-size-train 10 --min-size-val 5 --max-size-val 50 --dataset-size-train 100000 --dataset-size-val 100000 --set-weight exp --workers 8 --step 20 --batch-size 1 --epochs 200 --lr 0.01 --wd 0.005 --scheduler StepLR --lr-decay 0.5 --tensorboard
 Resume from best with set_MAP exp. python3 run.py --name digitsum_image_batch1_stepLR --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10000 --print-freq-val 1000 --dataset digitsum_image --test --root-dir /home/jupyter/data --resume best --min-size-train 2 --max-size-train 10 --min-size-val 5 --max-size-val 50 --dataset-size-train 100000 --dataset-size-val 100000 --set-weight exp --workers 8 --step 20 --batch-size 1 --epochs 200 --lr 0.01 --wd 0.005 --scheduler StepLR --lr-decay 0.5 --tensorboard
 
--- IN PROGRESS on instance-16cpu. With 3rd model. Full dropouts.
+-- INTERRUPTED on instance-16cpu. With 3rd model. Full dropouts.
 python3 run.py --name digitsum_image_batch1_fulldropouts --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10000 --print-freq-val 1000 --dataset digitsum_image --root-dir /home/jupyter/data --min-size-train 2 --max-size-train 10 --min-size-val 5 --max-size-val 50 --dataset-size-train 100000 --dataset-size-val 10000 --set-weight exp --workers 8 --step 20 --batch-size 1 --epochs 200 --lr 0.01 --wd 0.005 --scheduler ReduceLROnPlateau --lr-decay 0.5 --tensorboard
 
 
