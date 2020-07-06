@@ -81,6 +81,6 @@ If you have performed multiple experiments, tensorboard will aggregate them in t
   
   
  ## Requirements
- - Python 3
+ - Python 3.7
  - Pytorch
  - Tensorboard 1.14
