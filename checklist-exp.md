@@ -138,24 +138,24 @@ Training size = 5/5. Testing size = 2/10, 2/20, 2/50.
 
 - Training 5/5. Validation 2/10. Testing 2/10. Mean Set-weight. DONE.
 
-    + DONE on local. Batch Size = 64. With 1st model. Validation 2/10. StepLR. Mean Set-weight (BEST ERROR ?)
+    + DONE on local. Batch Size = 64. With 1st model. Validation 2/10. StepLR. Mean Set-weight.
         
         ```python3 run.py --name digitsum_image_trainlowvar --train-type regression --val-type digitsum --print-freq-train 10 --print-freq-val 100 --dataset digitsum_image --root-dir /Users/clementbeaulieu/Desktop/Polytechnique/UERecherche/DeepSets/data --arch digitsum_image --model-name digitsum_image50 --min-size-train 5 --max-size-train 5 --min-size-val 2 --max-size-val 10 --dataset-size-train 10000 --dataset-size-val 2000 --workers 8 --step 20 --batch-size 64 --epochs 100 --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard```
 
-        //TODO test with LATEST.
-        //TODO test with BEST. ERROR BEST.
+        //Tests DONE with best and latest.
 
-        LATEST.
-        BEST. ERROR mean set-weight.
+        LATEST. ```python3 run.py --name digitsum_image_trainlowvar --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10 --print-freq-val 100 --dataset digitsum_image --test --root-dir /Users/clementbeaulieu/Desktop/Polytechnique/UERecherche/DeepSets/data --resume latest --arch digitsum_image --model-name digitsum_image50 --min-size-train 5 --max-size-train 5 --min-size-val 2 --max-size-val 10 --dataset-size-train 10000 --dataset-size-val 10000 --workers 8 --step 20 --batch-size 64 --epochs 100 --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard```
+        BEST. Epoch 6. ```python3 run.py --name digitsum_image_trainlowvar --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10 --print-freq-val 100 --dataset digitsum_image --test --root-dir /Users/clementbeaulieu/Desktop/Polytechnique/UERecherche/DeepSets/data --resume best --arch digitsum_image --model-name digitsum_image50 --min-size-train 5 --max-size-train 5 --min-size-val 2 --max-size-val 10 --dataset-size-train 10000 --dataset-size-val 10000 --workers 8 --step 20 --batch-size 64 --epochs 100 --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard```
 
     + DONE on local. Batch Size = 64. With 1st model. Validation 2/10. ReduceLROnPlateau. ERROR set_mAP. Mean set-weight.
         
         ```python3 run.py --name digitsum_image_trainlowvar_reducelronplateau --train-type regression --val-type digitsum --print-freq-train 10 --print-freq-val 100 --dataset digitsum_image --root-dir /Users/clementbeaulieu/Desktop/Polytechnique/UERecherche/DeepSets/data --arch digitsum_image --model-name digitsum_image50 --min-size-train 5 --max-size-train 5 --min-size-val 2 --max-size-val 10 --dataset-size-train 50000 --dataset-size-val 5000 --workers 8 --step 20 --batch-size 64 --epochs 100 --scheduler ReduceLROnPlateau --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard```
 
         //TODO Test with LATEST. 
-        //TODO test with BEST. ERROR BEST.
+        //BEST. ERROR BEST.
 
-        LATEST.
+        LATEST. ```python3 run.py --name digitsum_image_trainlowvar_reducelronplateau --train-type regression --val-type digitsum --test-type digitsum --print-freq-train 10 --print-freq-val 100 --dataset digitsum_image --test --root-dir /Users/clementbeaulieu/Desktop/Polytechnique/UERecherche/DeepSets/data --resume latest --arch digitsum_image --model-name digitsum_image50 --min-size-train 5 --max-size-train 5 --min-size-val 2 --max-size-val 10 --dataset-size-train 50000 --dataset-size-val 50000 --workers 8 --step 20 --batch-size 64 --epochs 100 --scheduler ReduceLROnPlateau --lr 0.01 --wd 0.005 --lr-decay 0.5 --tensorboard```
+
         BEST. ERROR mean set-weight.
 
 - Training 5/5. Validation 5/5. Testing 2/10.
